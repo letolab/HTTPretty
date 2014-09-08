@@ -497,12 +497,14 @@ class Entry(BaseClass):
                  forcing_headers=None,
                  status=200,
                  streaming=False,
+                 validate=True,
                  **headers):
 
         self.method = method
         self.uri = uri
         self.info = None
         self.request = None
+        self.validation = validate
 
         self.body_is_callable = False
         if hasattr(body, "__call__"):
@@ -528,7 +530,8 @@ class Entry(BaseClass):
             name = "-".join(k.split("_")).title()
             self.adding_headers[name] = v
 
-        self.validate()
+        if self.validation:
+            self.validate()
 
     def validate(self):
         content_length_keys = 'Content-Length', 'content-length'
